@@ -81,7 +81,7 @@ async def search_books(
     all_books = list(books_db.values())
     result = [b for b in all_books if author.lower() in b.author.lower()]
     if not result: 
-        raise HTTPException(status_code=404, detail='Books not found')
+        raise HTTPException(status_code=400, detail='Books not found')
     return result
 
 @app.get('/books/stats',
