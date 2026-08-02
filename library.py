@@ -42,9 +42,9 @@ books_db: dict[int, Book] = {
 next_id: int = 3
 
 @app.exception_handler(InvalidSBNExeption)
-async def invalid_sbn_exception_handler(request: Request, exc: InvalidSBNExeption):
+async def invalid_isbn_exception_handler(request: Request, exc: InvalidSBNExeption):
     return JSONResponse(
-        status_code=404,
+        status_code=400,
         content={"message": f'Required ISBN: "{exc.isbn}" not found'},
     )
 
@@ -81,7 +81,7 @@ async def search_books(
     all_books = list(books_db.values())
     result = [b for b in all_books if author.lower() in b.author.lower()]
     if not result: 
-        raise HTTPException(status_code=400, detail='Books not found')
+        raise HTTPException(status_code=404, detail='Books not found')
     return result
 
 @app.get('/books/stats',
